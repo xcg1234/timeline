@@ -1,3 +1,5 @@
+//set up the Pin model structure for database
+
 const mongoose = require('mongoose');
 
 const PinSchema = new mongoose.Schema(

@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const Pin = require('../models/Pin');
+const Pin = require('../models/Pin'); // import pin model
 
 //create a pin
 

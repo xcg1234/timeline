@@ -23,7 +23,8 @@ app.get('/', (req, res) => {
 	res.send('haha');
 });
 
-app.use('/api/pins', pinRoute); // use the router created above
+// use the router created above
+app.use('/api/pins', pinRoute);
 app.use('/api/users', userRoute);
 
 app.listen(3000, () => {
