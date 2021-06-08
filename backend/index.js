@@ -24,7 +24,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/pins', pinRoute); // use the router created above
-app.use('/api/pins', userRoute);
+app.use('/api/users', userRoute);
 
 app.listen(3000, () => {
 	console.log('backend is running');
