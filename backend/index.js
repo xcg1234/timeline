@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const app = express();
 const pinRoute = require('./routes/pins');
 const userRoute = require('./routes/users');
+const PORT = 3001;
 
 dotenv.config();
 app.use(express.json());
@@ -20,13 +21,13 @@ mongoose
 	.catch((e) => console.log(e));
 
 app.get('/', (req, res) => {
-	res.send('haha');
+	res.send('hehe');
 });
 
 // use the router created above
-app.use('/api/pins', pinRoute);
-app.use('/api/users', userRoute);
+app.use('/pins', pinRoute);
+app.use('/users', userRoute);
 
-app.listen(3000, () => {
+app.listen(process.env.PORT || PORT, () => {
 	console.log('backend is running');
 });
