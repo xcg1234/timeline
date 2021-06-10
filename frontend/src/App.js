@@ -5,9 +5,9 @@ import RoomIcon from '@material-ui/icons/Room'; //the material UI drop icon
 import StarIcon from '@material-ui/icons/Star';
 import axios from 'axios';
 import { format } from 'timeago.js';
-
+import Register from './component/Register.jsx';
 function App() {
-	const currentUser = 'jane';
+	const [currentUser, setCurrentUser] = useState(null);
 	const [pins, setPins] = useState([]); //initialize the pin array
 	const [currentPlaceId, setCurrentPlaceId] = useState(null);
 	const [newPlace, setNewPlace] = useState(null); //create new pin when double click
@@ -45,7 +45,7 @@ function App() {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		const newPin = {
-			user: currentUser,
+			username: currentUser,
 			title,
 			desc,
 			rating,
@@ -91,8 +91,8 @@ function App() {
 							<Marker
 								latitude={p.lat}
 								longitude={p.long}
-								offsetLeft={-20}
-								offsetTop={-10}
+								offsetLeft={-viewport.zoom * 3.5}
+								offsetTop={-viewport.zoom * 7}
 							>
 								<RoomIcon
 									style={{
@@ -122,11 +122,7 @@ function App() {
 										<label>Rating</label>
 
 										<div className='stars'>
-											<StarIcon className='star' />
-											<StarIcon className='star' />
-											<StarIcon className='star' />
-											<StarIcon className='star' />
-											<StarIcon className='star' />
+											{Array(p.rating).fill(<StarIcon className='star' />)}
 										</div>
 
 										<label>Info</label>
@@ -180,6 +176,15 @@ function App() {
 						</div>
 					</Popup>
 				)}
+				{currentUser ? (
+					<button className='button logout'>Log Out</button>
+				) : (
+					<div className='buttons'>
+						<button className='button login'>Login</button>
+						<button className='button register'>Register</button>
+					</div>
+				)}
+				<Register />
 			</ReactMapGL>
 		</div>
 	);
