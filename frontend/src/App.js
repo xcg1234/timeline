@@ -1,4 +1,5 @@
 import './app.css';
+
 import { useState, useEffect } from 'react';
 import ReactMapGL, { Marker, Popup } from 'react-map-gl';
 import RoomIcon from '@material-ui/icons/Room'; //the material UI drop icon
@@ -6,12 +7,17 @@ import StarIcon from '@material-ui/icons/Star';
 import axios from 'axios';
 import { format } from 'timeago.js';
 import Register from './component/Register.jsx';
+import Login from './component/Login.jsx';
+
 function App() {
-	const [currentUser, setCurrentUser] = useState(null);
+	const myStorage = window.localStorage; // initialized the local storage
+	const [currentUser, setCurrentUser] = useState(myStorage.getItem('user'));
 	const [pins, setPins] = useState([]); //initialize the pin array
 	const [currentPlaceId, setCurrentPlaceId] = useState(null);
 	const [newPlace, setNewPlace] = useState(null); //create new pin when double click
 	const [title, setTitle] = useState(null);
+	const [showRegister, setShowRegister] = useState(false);
+	const [showLogin, setShowLogin] = useState(false);
 	const [desc, setDesc] = useState(null);
 	const [rating, setRating] = useState(0);
 	const [viewport, setViewport] = useState({
@@ -74,6 +80,10 @@ function App() {
 		getPins();
 	}, []);
 
+	const handleLogout = () => {
+		myStorage.removeItem('user');
+		setCurrentUser(null);
+	};
 	return (
 		<div className='App'>
 			<ReactMapGL
@@ -83,59 +93,55 @@ function App() {
 				onViewportChange={(nextViewport) => setViewport(nextViewport)}
 				onDblClick={handleAddClick}
 			>
-				{pins.map(
-					(
-						p //use map method display all the pins on the map
-					) => (
-						<>
-							<Marker
+				{pins.map((p) => (
+					<div key={p.createdAt}>
+						<Marker
+							latitude={p.lat}
+							longitude={p.long}
+							offsetLeft={-viewport.zoom * 3.5}
+							offsetTop={-viewport.zoom * 7}
+						>
+							<RoomIcon
+								style={{
+									fontSize: viewport.zoom * 7,
+									color: p.username === currentUser ? 'tomato' : 'slateblue',
+									cursor: 'pointer',
+								}}
+								onClick={() => handleMarkerClick(p._id, p.lat, p.long)}
+							/>
+						</Marker>
+						{p._id === currentPlaceId && (
+							<Popup
 								latitude={p.lat}
 								longitude={p.long}
-								offsetLeft={-viewport.zoom * 3.5}
-								offsetTop={-viewport.zoom * 7}
+								closeButton={true}
+								closeOnClick={false}
+								anchor='left'
+								onClose={() => {
+									setCurrentPlaceId(null);
+								}}
 							>
-								<RoomIcon
-									style={{
-										fontSize: viewport.zoom * 7,
-										color: p.username === currentUser ? 'tomato' : 'slateblue',
-										cursor: 'pointer',
-									}}
-									onClick={() => handleMarkerClick(p._id, p.lat, p.long)}
-								/>
-							</Marker>
-							{p._id === currentPlaceId && (
-								<Popup
-									latitude={p.lat}
-									longitude={p.long}
-									closeButton={true}
-									closeOnClick={false}
-									anchor='left'
-									onClose={() => {
-										setCurrentPlaceId(null);
-									}}
-								>
-									<div className='card'>
-										<label>Place</label>
-										<h4 className='place'>{p.title}</h4>
-										<label>Review</label>
-										<p className='desc'>{p.desc}</p>
-										<label>Rating</label>
+								<div className='card'>
+									<label>Place</label>
+									<h4 className='place'>{p.title}</h4>
+									<label>Review</label>
+									<p className='desc'>{p.desc}</p>
+									<label>Rating</label>
 
-										<div className='stars'>
-											{Array(p.rating).fill(<StarIcon className='star' />)}
-										</div>
-
-										<label>Info</label>
-										<span className='username'>
-											Created by <b>{p.username}</b>
-										</span>
-										<span className='date'>{format(p.createdAt)}</span>
+									<div className='stars'>
+										{Array(p.rating).fill(<StarIcon className='star' />)}
 									</div>
-								</Popup>
-							)}
-						</>
-					)
-				)}
+
+									<label>Info</label>
+									<span className='username'>
+										Created by <b>{p.username}</b>
+									</span>
+									<span className='date'>{format(p.createdAt)}</span>
+								</div>
+							</Popup>
+						)}
+					</div>
+				))}
 				{/* double click to add new pin based on cursor's lon/lat, if there is a new entry, show the pop up */}
 				{newPlace && (
 					<Popup
@@ -177,14 +183,31 @@ function App() {
 					</Popup>
 				)}
 				{currentUser ? (
-					<button className='button logout'>Log Out</button>
+					<button className='button logout' onClick={handleLogout}>
+						Log Out
+					</button>
 				) : (
 					<div className='buttons'>
-						<button className='button login'>Login</button>
-						<button className='button register'>Register</button>
+						<button className='button login' onClick={() => setShowLogin(true)}>
+							Login
+						</button>
+						<button
+							className='button register'
+							onClick={() => setShowRegister(true)}
+						>
+							Register
+						</button>
 					</div>
 				)}
-				<Register />
+
+				{showRegister && <Register setShowRegister={setShowRegister} />}
+				{showLogin && (
+					<Login
+						setShowLogin={setShowLogin}
+						myStorage={myStorage}
+						setCurrentUsername={setCurrentUser}
+					/>
+				)}
 			</ReactMapGL>
 		</div>
 	);
