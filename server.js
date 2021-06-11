@@ -7,7 +7,7 @@ const cors = require('cors');
 const pinRoute = require('./routes/pins');
 const userRoute = require('./routes/users');
 const PORT = process.env.PORT || 8800;
-app.use(express.static(path.join(__dirname, './frontend/build')));
+
 dotenv.config();
 app.use(express.json());
 app.use(cors());
@@ -23,12 +23,16 @@ mongoose
 	})
 	.catch((e) => console.log(e));
 
-app.get('/', (req, res) => {
-	res.send('Hello World!');
-});
 // use the router created above
 app.use('/pins', pinRoute);
 app.use('/users', userRoute);
+
+if (process.env.NODE_ENV === 'production') {
+	app.use(express.static(path.join(__dirname, './frontend/build')));
+	app.get('*', (req, res) => {
+		res.sendFile(path.join(__dirname, 'frontend', 'build', 'index.html'));
+	});
+}
 
 app.listen(PORT, () => {
 	console.log('backend is running');
