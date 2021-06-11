@@ -1,5 +1,5 @@
 import './app.css';
-
+import mapboxgl from '!mapbox-gl';
 import { useState, useEffect } from 'react';
 import ReactMapGL, { Marker, Popup } from 'react-map-gl';
 import RoomIcon from '@material-ui/icons/Room'; //the material UI drop icon
@@ -8,6 +8,7 @@ import axios from 'axios';
 import { format } from 'timeago.js';
 import Register from './component/Register.jsx';
 import Login from './component/Login.jsx';
+
 // eslint-disable-next-line import/no-webpack-loader-syntax
 mapboxgl.workerClass =
 	require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default;
