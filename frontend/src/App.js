@@ -8,6 +8,9 @@ import axios from 'axios';
 import { format } from 'timeago.js';
 import Register from './component/Register.jsx';
 import Login from './component/Login.jsx';
+// eslint-disable-next-line import/no-webpack-loader-syntax
+mapboxgl.workerClass =
+	require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default;
 
 function App() {
 	const myStorage = window.localStorage; // initialized the local storage
