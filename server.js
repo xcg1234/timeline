@@ -26,7 +26,9 @@ mongoose
 // use the router created above
 app.use('/pins', pinRoute);
 app.use('/users', userRoute);
-
+app.get('/', (req, res) => {
+	res.send('welcome');
+});
 // if (process.env.NODE_ENV === 'production') {
 // 	app.use(express.static(path.join(__dirname, './frontend/build')));
 // 	app.get('*', (req, res) => {
