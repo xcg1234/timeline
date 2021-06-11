@@ -2,7 +2,7 @@ const router = require('express').Router();
 const User = require('../models/User'); // import User model
 const bcrypt = require('bcrypt');
 
-//register
+//register route at /users/register
 
 router.post('/register', async (req, res) => {
 	try {
@@ -27,7 +27,7 @@ router.post('/register', async (req, res) => {
 	}
 });
 
-//login
+//login route at /users/login
 router.post('/login', async (req, res) => {
 	try {
 		//find user

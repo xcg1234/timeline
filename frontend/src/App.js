@@ -145,6 +145,7 @@ function App() {
 				{/* double click to add new pin based on cursor's lon/lat, if there is a new entry, show the pop up */}
 				{newPlace && (
 					<Popup
+						key={newPlace.createdAt}
 						latitude={newPlace.lat}
 						longitude={newPlace.long}
 						closeButton={true}
