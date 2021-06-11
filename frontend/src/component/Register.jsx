@@ -18,7 +18,10 @@ function Register({ setShowRegister }) {
 			password: passwordRef.current.value,
 		};
 		try {
-			await axios.post('/users/register', newUser);
+			await axios.post(
+				'https://timeline-x.herokuapp.com/users/register',
+				newUser
+			);
 			setError(false);
 			setSuccess(true);
 		} catch (error) {

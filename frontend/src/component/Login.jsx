@@ -16,7 +16,10 @@ function Login({ setShowLogin, setCurrentUsername, myStorage }) {
 			password: passwordRef.current.value,
 		};
 		try {
-			const res = await axios.post('/users/login', user);
+			const res = await axios.post(
+				'https://timeline-x.herokuapp.com/users/login',
+				user
+			);
 			setCurrentUsername(res.data.username); // store the user info to local storage
 			myStorage.setItem('user', res.data.username);
 			setShowLogin(false);

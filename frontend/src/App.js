@@ -1,5 +1,5 @@
 import './app.css';
-import mapboxgl from '!mapbox-gl';
+// import mapboxgl from 'mapbox-gl';
 import { useState, useEffect } from 'react';
 import ReactMapGL, { Marker, Popup } from 'react-map-gl';
 import RoomIcon from '@material-ui/icons/Room'; //the material UI drop icon
@@ -8,10 +8,6 @@ import axios from 'axios';
 import { format } from 'timeago.js';
 import Register from './component/Register.jsx';
 import Login from './component/Login.jsx';
-
-// eslint-disable-next-line import/no-webpack-loader-syntax
-mapboxgl.workerClass =
-	require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default;
 
 function App() {
 	const myStorage = window.localStorage; // initialized the local storage
@@ -64,7 +60,10 @@ function App() {
 		};
 		//send to backend
 		try {
-			const res = await axios.post('/pins', newPin);
+			const res = await axios.post(
+				'https://timeline-x.herokuapp.com/pins',
+				newPin
+			);
 			setPins([...pins, res.data]); //add the new pin to pin array
 			setNewPlace(null); //close the popup after submit
 		} catch (error) {
@@ -75,7 +74,9 @@ function App() {
 	useEffect(() => {
 		const getPins = async () => {
 			try {
-				const allPins = await axios.get('/pins'); //grab pins data from backend database and set to pins state
+				const allPins = await axios.get(
+					'https://timeline-x.herokuapp.com/pins'
+				); //grab pins data from backend database and set to pins state
 				setPins(allPins.data);
 			} catch (error) {
 				console.log(error);
