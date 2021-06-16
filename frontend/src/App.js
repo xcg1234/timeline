@@ -1,6 +1,7 @@
 import './app.css';
-// import mapboxgl from 'mapbox-gl';
-import { useState, useEffect } from 'react';
+import 'react-map-gl-geocoder/dist/mapbox-gl-geocoder.css';
+
+import { useState, useEffect, useRef, useCallback } from 'react';
 import ReactMapGL, { Marker, Popup } from 'react-map-gl';
 import RoomIcon from '@material-ui/icons/Room'; //the material UI drop icon
 import StarIcon from '@material-ui/icons/Star';
@@ -8,8 +9,10 @@ import axios from 'axios';
 import { format } from 'timeago.js';
 import Register from './component/Register.jsx';
 import Login from './component/Login.jsx';
+import Geocoder from 'react-map-gl-geocoder';
 
 function App() {
+	const mapRef = useRef();
 	const myStorage = window.localStorage; // initialized the local storage
 	const [currentUser, setCurrentUser] = useState(myStorage.getItem('user'));
 	const [pins, setPins] = useState([]); //initialize the pin array
@@ -28,6 +31,10 @@ function App() {
 		zoom: 4,
 	});
 
+	const handleViewportChange = useCallback(
+		(newViewport) => setViewport(newViewport),
+		[]
+	);
 	const handleMarkerClick = (id, lat, long) => {
 		//check the detail of the current pin you stayed on
 		setCurrentPlaceId(id);
@@ -89,15 +96,35 @@ function App() {
 		myStorage.removeItem('user');
 		setCurrentUser(null);
 	};
+
+	const handleGeocoderViewportChange = useCallback(
+		(newViewport) => {
+			const geocoderDefaultOverrides = { transitionDuration: 1000 };
+
+			return handleViewportChange({
+				...newViewport,
+				...geocoderDefaultOverrides,
+			});
+		},
+		[handleViewportChange]
+	);
+
 	return (
 		<div className='App'>
 			<ReactMapGL
 				{...viewport}
 				mapStyle='mapbox://styles/xcg1234/ckpoby1jx0xt117phqtxc5hhb'
 				mapboxApiAccessToken={process.env.REACT_APP_MAPBOX} // linked to the token in env file
-				onViewportChange={(nextViewport) => setViewport(nextViewport)}
+				onViewportChange={handleViewportChange}
 				onDblClick={handleAddClick}
+				ref={mapRef}
 			>
+				<Geocoder
+					mapRef={mapRef}
+					onViewportChange={handleGeocoderViewportChange}
+					mapboxApiAccessToken={process.env.REACT_APP_MAPBOX}
+					position='top-left'
+				/>
 				{pins.map((p) => (
 					<div key={p.createdAt}>
 						<Marker
