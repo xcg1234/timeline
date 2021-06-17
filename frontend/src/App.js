@@ -1,6 +1,6 @@
 import './app.css';
-import 'react-map-gl-geocoder/dist/mapbox-gl-geocoder.css';
 
+// import 'react-map-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import ReactMapGL, { Marker, Popup } from 'react-map-gl';
 import RoomIcon from '@material-ui/icons/Room'; //the material UI drop icon
