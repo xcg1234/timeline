@@ -38,6 +38,7 @@ function App() {
 	const handleMarkerClick = (id, lat, long) => {
 		//check the detail of the current pin you stayed on
 		setCurrentPlaceId(id);
+		//shift the map to the current pin, viewport is an object,use spread operator to only update the lat and long
 		setViewport({
 			...viewport,
 			latitude: lat,
