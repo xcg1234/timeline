@@ -46,7 +46,7 @@ function App() {
 		});
 	};
 
-	//add location when dblclick and create a new "newPlace" which will also trigger popup
+	//add location when dblclick and create a new "newPlace" which will also trigger popup, it will detect where your cursor is and create a new pin based on the long, lat
 	const handleAddClick = (e) => {
 		const [long, lat] = e.lngLat;
 		setNewPlace({
