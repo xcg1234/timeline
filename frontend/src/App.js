@@ -1,4 +1,4 @@
-import './app.css';
+import './App.css';
 
 // import 'react-map-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import { useState, useEffect, useRef, useCallback } from 'react';
