@@ -69,7 +69,7 @@ function App() {
 		//send to backend
 		try {
 			const res = await axios.post(
-				'https://timeline-x.herokuapp.com/pins',
+				'https://timeline-xx.herokuapp.com/pins',
 				newPin
 			);
 			setPins([...pins, res.data]); //add the new pin to pin array
@@ -83,7 +83,7 @@ function App() {
 		const getPins = async () => {
 			try {
 				const allPins = await axios.get(
-					'https://timeline-x.herokuapp.com/pins'
+					'https://timeline-xx.herokuapp.com/pins'
 				); //grab pins data from backend database and set to pins state
 				setPins(allPins.data);
 			} catch (error) {

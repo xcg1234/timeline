@@ -19,7 +19,7 @@ function Register({ setShowRegister }) {
 		};
 		try {
 			await axios.post(
-				'https://timeline-x.herokuapp.com/users/register',
+				'https://timeline-xx.herokuapp.com/users/register',
 				newUser
 			);
 			setError(false);
